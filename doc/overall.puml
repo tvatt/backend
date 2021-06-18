@@ -1,0 +1,36 @@
+@startuml
+
+agent Browser as b
+
+frame "Cloud (Heroku)" {
+    frame "Frontend \n se-hkr-tavla-fe.herokuapp.com"{
+        rectangle "HTML Server \n  (NodeJS Express & vanilla JS)" as fe
+    }
+
+    frame "Load Balancer \n se-hkr-tavla-lb.herokuapp.com" {
+        rectangle "RESTful API\n  (NodeJS Express)" as lb
+    }
+
+    lb <-up-> fe :ask for best route to Backend
+
+    frame "Backend US \n se-hkr-tavla-be.herokuapp.com" {
+        rectangle "RESTful API & Web Socket Server \n  (NodeJS Express)" as us
+    }
+
+    frame "Backend EU\n se-hkr-tavla-be-eu.herokuapp.com" {
+        rectangle "RESTful API & Web Socket Server \n  (NodeJS Express)" as eu
+    }
+
+    lb -down.> us :check health
+    lb -down.> eu :check health
+
+    database "Database\n(PostgreSQL)" as d
+    eu <-down-> d
+    us <-down-> d
+
+}
+b <-- fe :GET homepage
+b <--> us :RESTful web API
+b <--> eu :RESTful web API
+
+@enduml

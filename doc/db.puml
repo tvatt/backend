@@ -1,0 +1,37 @@
+@startuml
+
+hide circle
+
+' avoid problems with angled crows feet
+skinparam linetype ortho
+
+entity "Login" as l{
+    **id**:   BIGSERIAL PRIMARY KEY
+    unitNo:   varchar(10) UNIQUE
+    username: varchar(50) UNIQUE
+    hash:     char(64)
+    salt:     char(10)
+}
+
+entity "Board" as b{
+    **id**:    BIGSERIAL PRIMARY KEY,
+--
+    day:      char(10)
+    slot:  smallint
+    login: integer  UNIQUE
+--
+    FOREIGN KEY(login) REFERENCES Login (id),
+    UNIQUE (day, slot)
+}
+b }-up- l
+
+
+entity "Statistics" as s{
+    **id**:    BIGSERIAL PRIMARY KEY
+    --
+    datetime:      datestamp
+    action:         varchar(20)
+    username:       char(50)
+}
+
+@enduml
