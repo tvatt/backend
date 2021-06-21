@@ -189,8 +189,8 @@ app.get('/api/user/:username', async (req, res) => {
 // add new user
 app.post('/api/user', async (req, res) => {
   try {
-    /*if (sendResponseWhenAdminNotAuth(await isAdminAuth(req.headers.authorization), res))
-      return;*/
+    if (sendResponseWhenAdminNotAuth(await isAdminAuth(req.headers.authorization), res))
+      return;
 
     const newUser = {
       unitNo: req.body.unitNo,
